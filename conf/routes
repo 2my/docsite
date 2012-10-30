@@ -9,4 +9,6 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # fall-through tries to render markdown
-GET     /*file               	      controllers.Application.page( file )
+GET     /*file.html               	      controllers.MarkDown.html( file )
+GET     /*file.md               	      controllers.MarkDown.md( file )
+GET     /*file               	      	  controllers.MarkDown.page( file )
