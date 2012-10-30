@@ -1,0 +1,16 @@
+@(includeMd: String)(implicit lang: Lang)
+
+@main("MarkDown viewer") {
+
+	
+	<script type="text/javascript" src="/assets/pagedown/Markdown.Converter.js"></script>
+	<script type="text/javascript" src="/assets/pagedown/Markdown.Sanitizer.js"></script>
+	<script type="text/javascript" src="/assets/pagedown/Markdown.Editor.js"></script>
+
+	<script type="text/javascript">
+			(function () {
+					var converter = Markdown.getSanitizingConverter();
+			    document.write(converter.makeHtml("@includeMd"));
+		})();
+	</script>
+}
