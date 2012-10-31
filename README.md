@@ -25,8 +25,10 @@ Server side logic is done with [Play 2][4] [Scala][5]
 [10]: https://github.com/playframework/Play20/wiki/ProductionHeroku
 [11]: https://github.com/heroku/scala-play-sample
 
+heroku create
 git push heroku master
 
+http://fathomless-beach-8371.herokuapp.com/
 http://fathomless-forest-7582.herokuapp.com/ | git@heroku.com:fathomless-forest-7582.git
 
 
