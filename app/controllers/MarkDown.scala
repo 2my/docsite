@@ -15,10 +15,11 @@ object MarkDown extends Controller {
     val mdRes	= Play.resource( "/public/" + resourceName + ".md" ).map( url => new File(url.getFile) )
     (htmlRes, mdRes) match {
       case (None,None) => NotFound
-      case (None,Some(file)) => Ok(views.html.mdview("**FixMe: read file**"))
+      case (None,Some(file)) => Ok( views.html.mdview( file.getName ) )
       case (Some(file),_) => Ok.sendFile( file, true )
     }
   }
+
 
   def md( resourceName: String ) = Action {
     val resource	= Play.resource( "/public/" + resourceName + ".md" ).map( url => new File(url.getFile) )

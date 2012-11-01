@@ -1,4 +1,4 @@
-@(includeMd: String)(implicit lang: Lang)
+@(includeMdFile: String)(implicit lang: Lang)
 
 @main("MarkDown viewer") {
 
@@ -9,8 +9,11 @@
 
 	<script type="text/javascript">
 			(function () {
+				$.ajax({url: "@includeMdFile"}).done(function( html ) {
 					var converter = Markdown.getSanitizingConverter();
-			    document.write(converter.makeHtml("@includeMd"));
+			    $("#md").html(converter.makeHtml( html ));
+			  });
 		})();
 	</script>
+	<div id="md">Replaced by MarkDown</div>
 }
