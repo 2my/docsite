@@ -20,6 +20,8 @@ heroku create
 git push heroku master  
 play debug run  
 
+(in fork) git pull upstream master  
+
 
 [pd]: http://code.google.com/p/pagedown/wiki/PageDown
 [sd]: https://github.com/coreyti/showdown
@@ -29,3 +31,4 @@ play debug run
 
 [p2h]: https://github.com/playframework/Play20/wiki/ProductionHeroku
 [p2hsample]: https://github.com/heroku/scala-play-sample
+
