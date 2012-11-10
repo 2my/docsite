@@ -11,21 +11,23 @@ import play.api.mvc._
 object MarkDown extends Controller {
 
   def html( resourceName: String ) = Action {
-    val htmlRes	= Play.resource( "/public/" + resourceName + ".html" ).map( url => new File(url.getFile) )
-    val mdRes	= Play.resource( "/public/" + resourceName + ".md" ).map( url => new File(url.getFile) )
+    val htmlRes	= Play.resource( "/public/" + resourceName + ".html" )	// .map( url => new File(url.getFile) )
+    val mdRes		= Play.resource( "/public/" + resourceName + ".md" )		// .map( url => new File(url.getFile) )
+    println( htmlRes )
+    println( mdRes )
     (htmlRes, mdRes) match {
       case (None,None) => NotFound
-      case (None,Some(file)) => Ok( views.html.mdview( file.getName ) )
-      case (Some(file),_) => Ok.sendFile( file, true )
+      case (None,Some( url )) => Ok( views.html.mdview( new File( url.getFile ).getName ) )
+      case (Some( url ),_) => Ok.stream( Enumerator.fromStream( url.openStream() ) ).withHeaders( "Content-Type"->"text/html" )
     }
   }
 
 
   def md( resourceName: String ) = Action {
-    val resource	= Play.resource( "/public/" + resourceName + ".md" ).map( url => new File(url.getFile) )
+    val resource	= Play.resource( "/public/" + resourceName + ".md" )	// .map( url => new File(url.getFile) )
     resource match {
       case None => NotFound
-      case Some(file) => markDownResult( file )
+      case Some( url ) => Ok.stream( Enumerator.fromStream( url.openStream() ) ).withHeaders( "Content-Type"->"text/plain" )
     }
   }
 
