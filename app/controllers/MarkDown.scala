@@ -13,8 +13,6 @@ object MarkDown extends Controller {
   def html( resourceName: String ) = Action {
     val htmlRes	= Play.resource( "/public/" + resourceName + ".html" )	// .map( url => new File(url.getFile) )
     val mdRes		= Play.resource( "/public/" + resourceName + ".md" )		// .map( url => new File(url.getFile) )
-    println( htmlRes )
-    println( mdRes )
     (htmlRes, mdRes) match {
       case (None,None) => NotFound
       case (None,Some( url )) => Ok( views.html.mdview( new File( url.getFile ).getName ) )
