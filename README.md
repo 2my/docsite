@@ -20,7 +20,12 @@ heroku create
 git push heroku master  
 play debug run  
 
-(in fork) git pull upstream master  
+##
+I set up so that published projects (2my + antares docsite) have docengine upstream. See [GitRef on remotes][git-remote]. In order to manage passwords, I followed tip on [GitHub and Multiple Accounts][git-passwords].
+(antares.docsite) git pull upstream master  
+(2my.docsite) git pull upstream master  
+(2my.docsite) git push origin master  
+
 
 
 [pd]: http://code.google.com/p/pagedown/wiki/PageDown
@@ -32,3 +37,5 @@ play debug run
 [p2h]: https://github.com/playframework/Play20/wiki/ProductionHeroku
 [p2hsample]: https://github.com/heroku/scala-play-sample
 
+[git-remote]: http://gitref.org/remotes/
+[git-passwords]: http://net.tutsplus.com/tutorials/tools-and-tips/how-to-work-with-github-and-multiple-accounts/
