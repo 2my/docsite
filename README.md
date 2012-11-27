@@ -21,7 +21,8 @@ git push heroku master
 play debug run  
 
 ##
-I set up so that published projects (2my + antares docsite) have docengine upstream. See [GitRef on remotes][git-remote]. In order to manage passwords, I followed tip on [GitHub and Multiple Accounts][git-passwords].
+I set up so that published projects (2my + antares docsite) have docengine upstream. See [GitRef on remotes][git-remote]. In order to manage passwords, I followed tip on [GitHub and Multiple Accounts][git-passwords].  
+
 (antares.docsite) git pull upstream master  
 (2my.docsite) git pull upstream master  
 (2my.docsite) git push origin master  
