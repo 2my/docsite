@@ -13,6 +13,7 @@ import play.api._
 import play.api.data._
 import play.api.data.Forms._
 import java.util.HashMap
+import play.libs.Json
 
 object Application extends Controller {
   
@@ -38,17 +39,13 @@ object Application extends Controller {
 	    },
 	    {
       case (openid) =>
-        Logger.info( "Log in using" + openid )
-        Console.println( routes.Application.verify.absoluteURL() )
-        val attributes = List[(String, String)] (
-          ("Email", "http://schema.openid.net/contact/email"),
-          ("FirstName", "http://schema.openid.net/namePerson/first"),
-          ("LastName", "http://schema.openid.net/namePerson/last")
-        )
+        Logger.info( "Log in using " + openid + " with redirect: " + routes.Application.verify.absoluteURL() )
+        val attributes = Seq("email" -> "http://schema.openid.net/contact/email")
+          // "FirstName", "http://schema.openid.net/namePerson/first"),
+          // "LastName", "http://schema.openid.net/namePerson/last")
 
         val returnToUrl = routes.Application.verify.absoluteURL()
-        val redirectUrl = OpenID.redirectURL( openid, returnToUrl, attributes);
-        AsyncResult(OpenID.redirectURL(openid, returnToUrl)
+        AsyncResult(OpenID.redirectURL(openid, returnToUrl, attributes)
 	          .extend( _.value match {
 	              case Redeemed(url) => Redirect(url)
 	              case Thrown(t) => Redirect(routes.Application.login)
@@ -60,7 +57,11 @@ object Application extends Controller {
 	def verify = Action { implicit request =>
 	  AsyncResult(
 	    OpenID.verifiedId.extend( _.value match {
-	      case Redeemed(info) => Ok(info.id + "\n" + info.attributes)
+	      case Redeemed(info) => {
+	        // Redirect(routes.Projects.index).withSession("email" -> user._1)
+	        Logger.info( info.attributes.toString() )
+	        Ok(info.id + "\n" + info.attributes)	//.withSession( "email" -> info.attributes.get("email") )
+	      }
 	      case Thrown(t) => {
 	        // Here you should look at the error, and give feedback to the user
 	        Redirect( routes.Application.login )
@@ -68,5 +69,44 @@ object Application extends Controller {
 	    })
 	  )
 	}
+
+}
+
+/**
+ * Provide security features
+ */
+trait Secured {
+  
+  /**
+   * Retrieve the connected user email.
+   */
+  private def username(request: RequestHeader) = request.session.get("email")
+
+  /**
+   * Redirect to login if the user in not authorized.
+   */
+  private def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Application.login)
+  
+  // --
+  
+  /** 
+   * Action for authenticated users.
+   */
+  def IsAuthenticated(f: => String => Request[AnyContent] => Result) = Security.Authenticated(username, onUnauthorized) { user =>
+    Action(request => f(user)(request))
+  }
+
+  /**
+   * Check if the connected user is a member of this project.
+   */
+  def IsMemberOf(project: Long)(f: => String => Request[AnyContent] => Result) = IsAuthenticated { user => request =>
+    Results.Forbidden
+    /*
+    if(Project.isMember(project, user)) {
+      f(user)(request)
+    } else {
+      Results.Forbidden
+    }*/
+  }
 
 }
