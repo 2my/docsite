@@ -1,0 +1,11 @@
+@()
+@main("Log in"){
+  <form action="@routes.Application.auth()" method="get">
+    <div>
+      <input type="hidden" name="openid" id="openid" value="https://www.google.com/accounts/o8/id" />
+    </div>
+    <div class="buttons">
+      <button type="submit">Log in with Google</button>
+    </div>
+  </form>
+}
