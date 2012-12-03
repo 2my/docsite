@@ -4,14 +4,22 @@
 
 # Home page
 GET /                           controllers.Application.index
-GET /login                      controllers.Application.login
-GET /login/auth		controllers.Application.auth()
-GET /login/verify	controllers.Application.verify()
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET /logout                     controllers.Application.logout
+GET /login                      controllers.Application.login
+GET /login/auth					controllers.Application.auth()
+GET /login/verify				controllers.Application.verify()
+
+# match protected resources first
+GET		/internal/*file.html				controllers.PrivateMarkDown.html( file )
+GET     /internal/*file.md					controllers.PrivateMarkDown.md( file )
+GET     /internal/*file						controllers.PrivateMarkDown.page( file )
+GET     /assets/content-internal/*file		controllers.PrivateMarkDown.page( file )
 
 # fall-through tries to render markdown
-GET     /*file.html               	      controllers.MarkDown.html( file )
-GET     /*file.md               	      controllers.MarkDown.md( file )
-GET     /*file               	      	  controllers.MarkDown.page( file )
+GET     /external/*file.html		controllers.PublicMarkDown.html( file )
+GET     /external/*file.md			controllers.PublicMarkDown.md( file )
+GET     /external/*file				controllers.PublicMarkDown.page( file )
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file           controllers.Assets.at(path="/public", file)
