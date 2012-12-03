@@ -1,6 +1,14 @@
-@()
+@()(implicit flash: Flash)
 @main("Log in"){
   <form action="@routes.Application.auth()" method="get">
+            
+	@flash.get("error").map { message =>
+	    <p class="error">@message</p>
+	}
+	@flash.get("success").map { message =>
+	    <p class="success">@message</p>
+	}
+
     <div>
       <input type="hidden" name="openid" id="openid" value="https://www.google.com/accounts/o8/id" />
     </div>
